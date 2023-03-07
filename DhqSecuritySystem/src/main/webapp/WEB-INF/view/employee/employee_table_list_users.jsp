@@ -261,9 +261,9 @@
         	<td>${employee.gender}</td>
 
             <td>
-            <a href="/admin/employee-view-attendance?id=${employee.id}" class="btn btn-info btn-icon-split">
-              <span class="text">CheckIn</span>
-              </a>
+             <a href="#" class="btn btn-info btn-icon-split checkin-btn" data-employee-id="${employee.id}">
+             <span class="text">CheckIn</span>
+             </a>
             </td>
 
           </tr>
@@ -336,6 +336,26 @@
 
           <!-- Page level custom scripts -->
           <script src="../static/admin/js/demo/datatables-demo.js"></script>
+
+          <script>
+            $(function() {
+                        $('.checkin-btn').on('click', function(event) {
+                          event.preventDefault();
+                          var employeeId = $(this).data('employee-id');
+                          var lastClick = sessionStorage.getItem('checkin_btn_clicked_' + employeeId);
+                          var now = new Date().getTime();
+                          if (lastClick !== null && now - lastClick < 86400000) {
+                            $(this).addClass('disabled');
+                             alert('You have already checked in today!');
+                          } else {
+                            sessionStorage.setItem('checkin_btn_clicked_' + employeeId, now);
+                            $(this).addClass('disabled');
+                            // Navigate to the attendance details page
+                            window.location.href = "/admin/employee-view-attendance?id=" + employeeId;
+                          }
+                        });
+                      });
+                    </script>
 
         </body>
         </html>

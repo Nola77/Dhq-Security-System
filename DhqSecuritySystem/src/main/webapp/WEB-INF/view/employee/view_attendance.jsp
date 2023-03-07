@@ -265,9 +265,9 @@
         								<td>${attendance.date}</td>
         								<td>${attendance.checkin}</td>
                                        <td>
-                                        <a href="/admin/employee-view-checkout?id=${attendance.id}" class="btn btn-danger btn-icon-split">
-                                          <span class="text">CheckOut</span>
-                                           </a>
+                                        <a href="#" class="btn btn-danger btn-icon-split checkout-btn" data-attendance-id="${attendance.id}">
+                                        <span class="text">CheckOut</span>
+                                        </a>
                                        </td>
                           	  </tr>
                           	  </c:forEach>
@@ -339,6 +339,26 @@
 
           <!-- Page level custom scripts -->
           <script src="../static/admin/js/demo/datatables-demo.js"></script>
+
+          <script>
+                    $(function() {
+                    $('.checkout-btn').on('click', function(event) {
+                    event.preventDefault();
+                    var attendanceId = $(this).data('attendance-id');
+                    var lastClick = sessionStorage.getItem('checkout_btn_clicked_' + attendanceId);
+                    var now = new Date().getTime();
+                    if (lastClick !== null && now - lastClick < 86400000) {
+                    $(this).addClass('disabled');
+                    alert('You have already checked out in today!');
+                    } else {
+                    sessionStorage.setItem('checkout_btn_clicked_' + attendanceId, now);
+                    $(this).addClass('disabled');
+                    // Navigate to the attendance details page
+                    window.location.href = "/admin/employee-view-checkout?id=" + attendanceId;
+                    }
+                    });
+                    });
+                    </script>
 
         </body>
         </html>
